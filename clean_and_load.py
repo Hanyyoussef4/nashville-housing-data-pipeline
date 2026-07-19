@@ -2,6 +2,14 @@
 import pandas as pd
 housing= pd.read_csv('nashville housing.csv')
 
+# verification query in SQL — a query referencing "UniqueID" failed
+# with "column does not exist," and information_schema showed the
+# actual column name was 9 characters long, not 8, meaning it had a
+# trailing space (e.g. "UniqueID "). Stripping whitespace from every
+# column name here, not just column values, prevents that same
+# hidden-character bug in any other column.
+housing.columns = housing.columns.str.strip()
+
 # SaleDate arrives as plain text (e.g. "April 9, 2013"). Converting to a
 # real datetime type so it can be sorted/filtered correctly in Postgres
 # later, instead of being compared as a string.
